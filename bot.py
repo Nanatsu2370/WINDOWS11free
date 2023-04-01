@@ -1631,9 +1631,9 @@ async def upload_revista(path,msg,username):
             urls = response_json["url"]
             await bot.send_message(username, f"Archivo Subdido: {namefiles}\nEnlace:\n"+urls)
             links.append(urls)
-            if b == len(files):
-                break 
-                await msg.edit("Finalizado⬆️❗")
+        if b == len(files):
+          #  break 
+            await msg.edit("Finalizado⬆️❗")
     else:
         await msg.edit(f"**⬆️Subiendo:** `{namefile}`")
         upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
