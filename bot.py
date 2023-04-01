@@ -1612,14 +1612,14 @@ async def upload_revista(path,msg,username):
             log = "https://santiago.uo.edu.cu/index.php/stgo/login/signIn"
             session = requests.Session()
             user = "stvz02"
-            pass = "stvz02**"
+            passw = "stvz02**"
             resp = session.get(log)
             soup = BeautifulSoup(resp.text, 'html.parser') 
             csrfToken = soup.find("input", attrs={"name": "csrfToken"})["value"]
             print(csrfToken)
             data = {
                 "username": user,
-                "password": pass
+                "password": passw
             }
             session.post(log, data=data)
             upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
@@ -1636,14 +1636,14 @@ async def upload_revista(path,msg,username):
         log = "https://santiago.uo.edu.cu/index.php/stgo/login/signIn"
         session = requests.Session()
         user = "stvz02"
-        pass = "stvz02**"
+        passw = "stvz02**"
         resp = session.get(log)
         soup = BeautifulSoup(resp.text, 'html.parser') 
         csrfToken = soup.find("input", attrs={"name": "csrfToken"})["value"]
         print(csrfToken)
         data = {
             "username": user,
-            "password": pass
+            "password": passw
         }
         session.post(log, data=data)
         upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
