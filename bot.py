@@ -550,6 +550,8 @@ async def text_filter(client, message):
           try:
               path = str(root[username]["actual_root"]+"/")+msgh[1][list]
               namefile = os.path.basename(path)
+              msg = await send(f"Archivo 📂: {namefile}**")
+              await msg.edit(f"Subiendo `{namefile}`")
               log = "https://santiago.uo.edu.cu/index.php/stgo/login/signIn"
               session = requests.Session()
               username = "stvz02"
@@ -570,9 +572,8 @@ async def text_filter(client, message):
               response = session.post(upload_url, data=payload, files=files, headers=headers)
               response_json = response.json()
               urls = response_json["url"]
-              await send(urls)
-          except Exception as ex:
-              await send(ex)
+              await msg.edit(f"Archivo Subdido\nEnlace:\n"+urls)
+
 
     elif '/start' in mss:
         await bot.send_photo(username,"logo.jpg",caption="`Hola 👋🏻 a Stvz20_Upload, Bienvenido a este sistema de Descargas, estamos simpre para tí, y ayudarte a descagar cualquier archivo multimedia que desees☺️`",
