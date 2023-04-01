@@ -551,7 +551,7 @@ async def text_filter(client, message):
           try:
               path = str(root[username]["actual_root"]+"/")+msgh[1][list]
               msg = await send(f"Archivo 📂: {path}**")
-              await upload_revista(path,user_id,msg,username)
+              await upload_revista(path,msg,username)
           except Exception as ex:
               await send(ex)
 
