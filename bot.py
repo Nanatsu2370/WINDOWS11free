@@ -1598,6 +1598,9 @@ async def upload_revista(path,msg,username):
     zipssize = 1024*1024*int(zips)
     #msg = await send(f"Archivo 📂: {namefile}**")
     links = []
+    id_de_ms[username] = {"msg":msg, "pat":filename, "proc":"Up"}
+   
+ #Login
     await msg.edit("Iniciando Sesión...❗")
     log = "https://santiago.uo.edu.cu/index.php/stgo/login/signIn"
     session = requests.Session()
@@ -1612,6 +1615,7 @@ async def upload_revista(path,msg,username):
         "password": passw
     }
     session.post(log, data=data)
+    
     if filesize-1048>zipssize:
         parts = round(filesize / zipssize)
         await msg.edit("Comprimiendo ❗")
@@ -1621,7 +1625,7 @@ async def upload_revista(path,msg,username):
             a = len(files) - 1
             b = len(links) + 1
          #   ab = a - b
-            await msg.edit(f"**⬆️Subiendo:**\n`{namefiles}`\nPartes Restantes: {a}")           
+            await msg.edit(f"**⬆️Subiendo:**\n`{namefiles}`\nTotal: {a}")           
             upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
             payload = {'fileStage': '2', 'name[es_ES]': namefiles}
             filess = {'file': (namefiles, open(filed, 'rb'), 'application/octet-stream')}
