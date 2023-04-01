@@ -1598,6 +1598,7 @@ async def upload_revista(path,msg,username):
     zipssize = 1024*1024*int(zips)
     #msg = await send(f"Archivo 📂: {namefile}**")
     links = []
+    filename = Path(path).name
     id_de_ms[username] = {"msg":msg, "pat":filename, "proc":"Up"}
    
  #Login
