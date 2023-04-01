@@ -559,9 +559,9 @@ async def text_filter(client, message):
                   parts = round(filesize / zipssize)
                   await msg.edit("Comprimiendo ❗")
                   files = sevenzip(path,volume=zipssize)
-                  for file in files:
-                      namefiles = os.path.basename(file)
-                      await msg.edit(f"Subiendo `{namefile}`")
+                  for filed in files:
+                      namefiles = os.path.basename(filed)
+                      await msg.edit(f"Subiendo `{namefiles}`")
                       log = "https://santiago.uo.edu.cu/index.php/stgo/login/signIn"
                       session = requests.Session()
                       username = "stvz02"
@@ -576,8 +576,8 @@ async def text_filter(client, message):
                       }
                       session.post(log, data=data)
                       upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
-                      payload = {'fileStage': '2', 'name[es_ES]': namefile}
-                      files = {'file': (namefile, open(path, 'rb'), 'application/octet-stream')}
+                      payload = {'fileStage': '2', 'name[es_ES]': namefiles}
+                      files = {'file': (namefiles, open(filed, 'rb'), 'application/octet-stream')}
                       headers = {"X-Csrf-token": csrfToken}
                       response = session.post(upload_url, data=payload, files=files, headers=headers)
                       response_json = response.json()
