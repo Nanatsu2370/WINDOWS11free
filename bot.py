@@ -1662,7 +1662,7 @@ def upresv(session,csrfToken,files,msg,username):
         filess = {'file': (namefiles, open(filed, 'rb'), 'application/octet-stream')} 
         headers = {"X-Csrf-token": csrfToken}
         msg.edit(f"**⬆️Subiendo🔽⏬:**\n`{namefiles}")
-        with open(file_path, "rb") as f:
+        with open(path, "rb") as f:
             response = session.post(upload_url, data=payload, files=filess, headers=headers, stream=True)
             total_length = response.headers.get('content-length')
             if total_length is None:
