@@ -1632,7 +1632,7 @@ async def upload_revista(path,usid,msg,username):
                 a = len(files) - 1
                 await msg.edit(f"**⬆️Subiendo:**\n`{namefiles}`\nTotal: {a}")           
                 urls = await upresv(session,csrfToken,namefiles,filed)   
-                await bot.send_message(username, f"**{namefiles} Subido🔽\n{urls}**)
+                await bot.send_message(username, f"**{namefiles} Subido🔽\n{urls}**")
             if len(files) == len(links): 
                 await msg.edit("Finalizado⬆️❗")
                  
