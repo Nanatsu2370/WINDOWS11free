@@ -1627,57 +1627,36 @@ async def upload_revista(path,usid,msg,username):
             parts = round(filesize / zipssize)
             await msg.edit("Comprimiendo ❗")
             files = sevenzip(path,volume=zipssize)
-           # for filed in files:
-              #  namefiles = os.path.basename(filed)
-              #  a = len(files) - 1
-             #   await msg.edit(f"**⬆️Subiendo:**\n`{namefiles}`\nTotal: {a}")           
-               # urls = await upresv(session,csrfToken,namefiles,filed)  
             thread = threading.Thread(target=upresv, args=(session,csrfToken,files,msg,username))
             thread.start() 
-                
-          #  if len(files) == len(links): 
-          #      await msg.edit("Finalizado...⬆️❗")
-                 
-          #  else:
-           #     await msg.edit("error")
-           #     return
         else: 
-            await msg.edit(f"**⬆️Subiendo:** `{namefile}`")
-            upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
-            payload = {'fileStage': '2', 'name[es_ES]': namefile}
-            files = {'file': (namefile, open(path, 'rb'), 'application/octet-stream')}
-            headers = {"X-Csrf-token": csrfToken}
-            response = session.post(upload_url, data=payload, files=files, headers=headers)
-            response_json = response.json()
-            urls = response_json["url"]
-            await bot.send_message(username, f"Archivo Subdido\nEnlace:\n"+urls)
-            return
+            thread = threading.Thread(target=upresvs, args=(session,csrfToken,path,msg,username))
+            thread.start()
+            
 
 def upresv(session,csrfToken,files,msg,username):
     for filed in files:
-        
         namefiles = os.path.basename(filed)
         upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
         payload = {'fileStage': '2', 'name[es_ES]': namefiles}
         filess = {'file': (namefiles, open(filed, 'rb'), 'application/octet-stream')} 
         headers = {"X-Csrf-token": csrfToken}
-        msg.edit(f"**⬆️Subiendo🔽⏬:**\n`{namefiles}")
-        with open(path, "rb") as f:
-            response = session.post(upload_url, data=payload, files=filess, headers=headers, stream=True)
-            total_length = response.headers.get('content-length')
-            if total_length is None:
-                msg.edit_text(f"⬆️Subiendo🔽⏬:\n`{namefiles}`\n100%")
-            else:
-                with tqdm(total=int(total_length), unit='B', unit_scale=True, desc=f"⬆️Subiendo🔽⏬: {namefiles}", ascii=True) as progress_bar:
-                    for data in response.iter_content(chunk_size=4096):
-                        progress_bar.update(len(data))
+        msg.edit(f"⬆️Subiendo🔽⏬:\n`{namefiles}")
+        response = session.post(upload_url, data=payload, files=filess, headers=headers)
+        response_json = response.json()
+        urls = response_json["url"]
+        bot.send_message(username, f"{namefiles} Subido🔽\n{urls}")
 
-
-      #  response_json = response.json()
-        
-      #  urls = response.json()["url"]
-      #  bot.send_message(username, f"**{namefiles} Subido🔽\n{urls}**")
-    
+def upresvs(session,csrfToken,path,msg,username):
+    msg.edit(f"**⬆️Subiendo:** `{namefile}`")
+    upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
+    payload = {'fileStage': '2', 'name[es_ES]': namefile}
+    files = {'file': (namefile, open(path, 'rb'), 'application/octet-stream')}
+    headers = {"X-Csrf-token": csrfToken}
+    response = session.post(upload_url, data=payload, files=files, headers=headers)
+    response_json = response.json()
+    urls = response_json["url"]
+    bot.send_message(username, f"{namefiles} Subido🔽\n{urls}")
 
 bot.start()
 bot.send_message(5416296262,'**BoT Iniciado**')
