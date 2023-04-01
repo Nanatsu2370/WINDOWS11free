@@ -552,13 +552,13 @@ async def text_filter(client, message):
               path = str(root[username]["actual_root"]+"/")+msgh[1][list]
               namefile = os.path.basename(path)
               zips = Configs[username]["z"]
-              filesize = path.stat().st_size
+              filesize = Path(path).stat().st_size
               zipssize = 1024*1024*int(zips)
               msg = await send(f"Archivo 📂: {namefile}**")
               if filesize-1048>zipssize:
                   parts = round(filesize / zipssize)
                   await msg.edit("Comprimiendo ❗")
-                  files = sevenzip(file,volume=zipssize)
+                  files = sevenzip(path,volume=zipssize)
                   for file in files:
                       namefiles = os.path.basename(file)
                       await msg.edit(f"Subiendo `{namefile}`")
