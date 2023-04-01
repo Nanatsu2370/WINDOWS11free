@@ -1634,6 +1634,8 @@ async def upload_revista(path,msg,username):
         if len(links) == len(files):
           #  break 
             await msg.edit("Finalizado⬆️❗")
+        else:
+            await msg.edit("error")
     else:
         await msg.edit(f"**⬆️Subiendo:** `{namefile}`")
         upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
