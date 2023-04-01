@@ -587,7 +587,7 @@ async def text_filter(client, message):
                       links.append(urls)
                       if len(links) == len(files):
                           break
-                          await msg.edit("Archivos Subdidos")
+                          await msg.edit("Archios Subdidos")
                       else:continue
               else:
                   await msg.edit(f"**⬆️Subiendo:** `{namefile}`")
