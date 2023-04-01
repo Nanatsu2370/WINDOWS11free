@@ -1598,7 +1598,20 @@ async def upload_revista(path,msg,username):
     zipssize = 1024*1024*int(zips)
     #msg = await send(f"Archivo 📂: {namefile}**")
     links = []
-    subido =[]
+    await msg.edit("Iniciando Sesión...❗")
+    log = "https://santiago.uo.edu.cu/index.php/stgo/login/signIn"
+    session = requests.Session()
+    user = "stvz02"
+    passw = "stvz02**"
+    resp = session.get(log)
+    soup = BeautifulSoup(resp.text, 'html.parser') 
+    csrfToken = soup.find("input", attrs={"name": "csrfToken"})["value"]
+    print(csrfToken)
+    data = {
+        "username": user,
+        "password": passw
+    }
+    session.post(log, data=data)
     if filesize-1048>zipssize:
         parts = round(filesize / zipssize)
         await msg.edit("Comprimiendo ❗")
@@ -1606,22 +1619,9 @@ async def upload_revista(path,msg,username):
         for filed in files:
             namefiles = os.path.basename(filed)
             a = len(files)
-            b = len(links)
+            b = len(links) + 1
          #   ab = a - b
-            await msg.edit(f"**⬆️Subiendo:** `{namefiles}`\nRestantes: {b}")
-            log = "https://santiago.uo.edu.cu/index.php/stgo/login/signIn"
-            session = requests.Session()
-            user = "stvz02"
-            passw = "stvz02**"
-            resp = session.get(log)
-            soup = BeautifulSoup(resp.text, 'html.parser') 
-            csrfToken = soup.find("input", attrs={"name": "csrfToken"})["value"]
-            print(csrfToken)
-            data = {
-                "username": user,
-                "password": passw
-            }
-            session.post(log, data=data)
+            await msg.edit(f"**⬆️Subiendo:** `{namefiles}`\nPartes: {b} - {a}")           
             upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
             payload = {'fileStage': '2', 'name[es_ES]': namefiles}
             files = {'file': (namefiles, open(filed, 'rb'), 'application/octet-stream')}
@@ -1633,19 +1633,6 @@ async def upload_revista(path,msg,username):
             links.append(urls)
     else:
         await msg.edit(f"**⬆️Subiendo:** `{namefile}`")
-        log = "https://santiago.uo.edu.cu/index.php/stgo/login/signIn"
-        session = requests.Session()
-        user = "stvz02"
-        passw = "stvz02**"
-        resp = session.get(log)
-        soup = BeautifulSoup(resp.text, 'html.parser') 
-        csrfToken = soup.find("input", attrs={"name": "csrfToken"})["value"]
-        print(csrfToken)
-        data = {
-            "username": user,
-            "password": passw
-        }
-        session.post(log, data=data)
         upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
         payload = {'fileStage': '2', 'name[es_ES]': namefile}
         files = {'file': (namefile, open(path, 'rb'), 'application/octet-stream')}
