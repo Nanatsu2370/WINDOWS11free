@@ -1611,15 +1611,15 @@ async def upload_revista(path,msg,username):
             await msg.edit(f"**⬆️Subiendo:** `{namefiles}`\nRestantes: {b}")
             log = "https://santiago.uo.edu.cu/index.php/stgo/login/signIn"
             session = requests.Session()
-            username = "stvz02"
-            password = "stvz02**"
+            user = "stvz02"
+            pass = "stvz02**"
             resp = session.get(log)
             soup = BeautifulSoup(resp.text, 'html.parser') 
             csrfToken = soup.find("input", attrs={"name": "csrfToken"})["value"]
             print(csrfToken)
             data = {
-                "username": username,
-                "password": password
+                "username": user,
+                "password": pass
             }
             session.post(log, data=data)
             upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
@@ -1635,15 +1635,15 @@ async def upload_revista(path,msg,username):
         await msg.edit(f"**⬆️Subiendo:** `{namefile}`")
         log = "https://santiago.uo.edu.cu/index.php/stgo/login/signIn"
         session = requests.Session()
-        username = "stvz02"
-        password = "stvz02**"
+        user = "stvz02"
+        pass = "stvz02**"
         resp = session.get(log)
         soup = BeautifulSoup(resp.text, 'html.parser') 
         csrfToken = soup.find("input", attrs={"name": "csrfToken"})["value"]
         print(csrfToken)
         data = {
-            "username": username,
-            "password": password
+            "username": user,
+            "password": pass
         }
         session.post(log, data=data)
         upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
@@ -1653,7 +1653,7 @@ async def upload_revista(path,msg,username):
         response = session.post(upload_url, data=payload, files=files, headers=headers)
         response_json = response.json()
         urls = response_json["url"]
-        await send(f"Archivo Subdido\nEnlace:\n"+urls)
+        await bot.send_message(username, f"Archivo Subdido\nEnlace:\n"+urls)
 
 bot.start()
 bot.send_message(5416296262,'**BoT Iniciado**')
