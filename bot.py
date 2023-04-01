@@ -551,7 +551,8 @@ async def text_filter(client, message):
           try:
               path = str(root[username]["actual_root"]+"/")+msgh[1][list]
               namefile = os.path.basename(path)
-              filesize = Path(file).stat().st_size
+              zips = Configs[username]["z"]
+              filesize = path.stat().st_size
               zipssize = 1024*1024*int(zips)
               msg = await send(f"Archivo 📂: {namefile}**")
               if filesize-1048>zipssize:
