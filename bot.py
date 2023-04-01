@@ -1591,6 +1591,7 @@ async def proccess(filex,msg,username):
                 return
 
 async def upload_revista(path,msg,username):
+    send = message.reply
     namefile = os.path.basename(path)
     zips = Configs[username]["z"]
     filesize = Path(path).stat().st_size
