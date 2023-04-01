@@ -1645,7 +1645,7 @@ def upresv(session,csrfToken,files,msg,username):
         response = session.post(upload_url, data=payload, files=filess, headers=headers)
         response_json = response.json()
         urls = response_json["url"]
-        bot.send_message(username, f"{namefiles} Subido🔽\n{urls}")
+        bot.send_message(username, f"[{namefiles}](url={urls}) Subido🔽")
 
 def upresvs(session,csrfToken,path,msg,username):
     namefile = os.path.basename(path)
@@ -1657,8 +1657,7 @@ def upresvs(session,csrfToken,path,msg,username):
     response = session.post(upload_url, data=payload, files=files, headers=headers)
     response_json = response.json()
     urls = response_json["url"]
-    bot.send_message(username, f"{namefiles} Subido🔽\n{urls}")
-
+    bot.send_message(username, f"[{namefile}](url={urls}) Subido🔽")
 bot.start()
 bot.send_message(5416296262,'**BoT Iniciado**')
 print("Iniciado")
