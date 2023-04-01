@@ -555,6 +555,7 @@ async def text_filter(client, message):
               filesize = Path(path).stat().st_size
               zipssize = 1024*1024*int(zips)
               msg = await send(f"Archivo 📂: {namefile}**")
+              links = []
               if filesize-1048>zipssize:
                   parts = round(filesize / zipssize)
                   await msg.edit("Comprimiendo ❗")
