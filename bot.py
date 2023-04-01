@@ -1635,7 +1635,7 @@ async def upload_revista(path,usid,msg,username):
                 await bot.send_message(username, f"**{namefiles} Subido🔽\n{urls}**)
             if len(files) == len(links): 
                 await msg.edit("Finalizado⬆️❗")
-                return 
+                 
             else:
                 await msg.edit("error")
                 return
