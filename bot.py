@@ -531,7 +531,7 @@ async def text_filter(client, message):
               elif Configs[username]["m"] == "nexcloud":
                   await proccess(path,msg,username)
               elif Configs[username]["m"] == "revista":
-                  await proccess(path,msg,username)
+                  await upload_revista(path,msg,username)
               else:
                   await uploaddraft(path,user_id,msg,username)
           except Exception as ex:
