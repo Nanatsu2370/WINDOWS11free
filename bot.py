@@ -1654,23 +1654,25 @@ async def upload_revista(path,usid,msg,username):
             return
 
 def upresv(session,csrfToken,files,msg,username):
-    links = []
-    for filed in files:       
+    for filed in files:
+        
         namefiles = os.path.basename(filed)
         upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
         payload = {'fileStage': '2', 'name[es_ES]': namefiles}
         filess = {'file': (namefiles, open(filed, 'rb'), 'application/octet-stream')} 
         headers = {"X-Csrf-token": csrfToken}
-        msg.edit(f"⬆️Subiendo🔽⏬:\n`{namefiles}")
+        msg.edit(f"**⬆️Subiendo🔽⏬:**\n`{namefiles}")
         response = session.post(upload_url, data=payload, files=filess, headers=headers)
         response_json = response.json()
+        total_size = int(response.headers.get('content-length', 0))
+        bytes_uploaded = 0
+        for chunk in response.iter_content(chunk_size=1024):
+            bytes_uploaded += len(chunk)
+            percent_complete = int(bytes_uploaded / total_size * 100)
+            msg.edit(f"⬆️Subiendo🔽⏬:\n`{namefiles}`\n{percent_complete}% completado")
         urls = response_json["url"]
-        bot.send_message(username, f"{namefiles} Subido🔽\n{urls}")
-        links.append(urls)
-    if len(files) == len(links):
-        msg.edit("Archivos Subdidos")
-    else:
-       msg.edit("No se pudieron subir todos los archivos, por favor los q hayan faltado Sinaloa manualmente") 
+        bot.send_message(username, f"**{namefiles} Subido🔽\n{urls}**")
+    
 
 bot.start()
 bot.send_message(5416296262,'**BoT Iniciado**')
