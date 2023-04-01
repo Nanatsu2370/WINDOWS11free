@@ -1648,6 +1648,7 @@ def upresv(session,csrfToken,files,msg,username):
         bot.send_message(username, f"{namefiles} Subido🔽\n{urls}")
 
 def upresvs(session,csrfToken,path,msg,username):
+    namefile = os.path.basename(path)
     msg.edit(f"**⬆️Subiendo:** `{namefile}`")
     upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
     payload = {'fileStage': '2', 'name[es_ES]': namefile}
