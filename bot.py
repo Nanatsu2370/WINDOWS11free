@@ -1631,7 +1631,7 @@ async def upload_revista(path,msg,username):
             urls = response_json["url"]
             await bot.send_message(username, f"Archivo Subdido: {namefiles}\nEnlace:\n"+urls)
             links.append(urls)
-            if b = a:
+            if b == a:
                 break 
                 await msg.edit("Finalizado")
     else:
