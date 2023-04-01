@@ -1643,10 +1643,13 @@ async def upload_revista(path,usid,msg,username):
              urls = await upresv(namefiles,filed)
              await bot.send_message(username, f"Archivo Subdido: {namefiles}\nEnlace:\n"+urls)
              links.append(urls)
+             return
         if len(files) == len(links): 
             await msg.edit("Finalizado⬆️❗")
+            return
         else:
             await msg.edit("error")
+            return
     else: 
         await msg.edit(f"**⬆️Subiendo:** `{namefile}`")
         upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
@@ -1657,6 +1660,7 @@ async def upload_revista(path,usid,msg,username):
         response_json = response.json()
         urls = response_json["url"]
         await bot.send_message(username, f"Archivo Subdido\nEnlace:\n"+urls)
+        return
 
 async def upresv(namefiles,filed):
    # await msg.edit("Iniciando Sesión...❗")
