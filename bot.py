@@ -1632,15 +1632,15 @@ async def upload_revista(path,usid,msg,username):
               #  a = len(files) - 1
              #   await msg.edit(f"**⬆️Subiendo:**\n`{namefiles}`\nTotal: {a}")           
                # urls = await upresv(session,csrfToken,namefiles,filed)  
-            thread = threading.Thread(target=upresv, args=(session,csrfToken,files))
+            thread = threading.Thread(target=upresv, args=(session,csrfToken,files,msg,username))
             thread.start() 
                 
-            if len(files) == len(links): 
-                await msg.edit("Finalizado...⬆️❗")
+          #  if len(files) == len(links): 
+          #      await msg.edit("Finalizado...⬆️❗")
                  
-            else:
-                await msg.edit("error")
-                return
+          #  else:
+           #     await msg.edit("error")
+           #     return
         else: 
             await msg.edit(f"**⬆️Subiendo:** `{namefile}`")
             upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
@@ -1653,8 +1653,9 @@ async def upload_revista(path,usid,msg,username):
             await bot.send_message(username, f"Archivo Subdido\nEnlace:\n"+urls)
             return
 
-async def upresv(session,csrfToken,files):
+async def upresv(session,csrfToken,files,msg,username):
     for filed in files:
+        await msg.edit(f"**⬆️Subiendo🔽⏬:**\n`{namefiles}`\nTotal: {a}")
         namefiles = os.path.basename(filed)
         upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
         payload = {'fileStage': '2', 'name[es_ES]': namefiles}
