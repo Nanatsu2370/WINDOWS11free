@@ -537,107 +537,6 @@ async def text_filter(client, message):
           except Exception as ex:
               await send(ex)
 
-    elif "/dow_" in mss:
-          comp = comprobar_solo_un_proceso(username) 
-          if comp != False:
-              await send(comp)
-              return
-          else:pass
-          total_proc = total_de_procesos()
-          if total_proc != False:
-              await send(total_proc)
-              return
-          else:pass
-          list = int(message.text.split("_")[1])		
-          msgh = files_formatter(str(root[username]["actual_root"]),username)
-          try:
-              path = str(root[username]["actual_root"]+"/")+msgh[1][list]
-              msg = await send(f"Archivo 📂: {path}**")
-           
-              await upload_revista(path,msg,username)
-          except Exception as ex:
-              await send(ex)
-
-
-    elif "/sub_" in mss:
-          comp = comprobar_solo_un_proceso(username) 
-          if comp != False:
-              await send(comp)
-              return
-          else:pass
-          total_proc = total_de_procesos()
-          if total_proc != False:
-              await send(total_proc)
-              return
-          else:pass
-          list = int(message.text.split("_")[1])		
-          msgh = files_formatter(str(root[username]["actual_root"]),username)
-          try:
-              path = str(root[username]["actual_root"]+"/")+msgh[1][list]
-              namefile = os.path.basename(path)
-              zips = Configs[username]["z"]
-              filesize = Path(path).stat().st_size
-              zipssize = 1024*1024*int(zips)
-              msg = await send(f"Archivo 📂: {namefile}**")
-              links = []
-              if filesize-1048>zipssize:
-                  parts = round(filesize / zipssize)
-                  await msg.edit("Comprimiendo ❗")
-                  files = sevenzip(path,volume=zipssize)
-                  for filed in files:
-                      namefiles = os.path.basename(filed)
-                      a = len(files)
-                      b = len(links)
-                      ab = a - b
-                      await msg.edit(f"**⬆️Subiendo:** `{namefiles}`\nRestantes: {ab}")
-                      log = "https://santiago.uo.edu.cu/index.php/stgo/login/signIn"
-                      session = requests.Session()
-                      username = "stvz02"
-                      password = "stvz02**"
-                      resp = session.get(log)
-                      soup = BeautifulSoup(resp.text, 'html.parser') 
-                      csrfToken = soup.find("input", attrs={"name": "csrfToken"})["value"]
-                      print(csrfToken)
-                      data = {
-                          "username": username,
-                          "password": password
-                      }
-                      session.post(log, data=data)
-                      upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
-                      payload = {'fileStage': '2', 'name[es_ES]': namefiles}
-                      files = {'file': (namefiles, open(filed, 'rb'), 'application/octet-stream')}
-                      headers = {"X-Csrf-token": csrfToken}
-                      response = session.post(upload_url, data=payload, files=files, headers=headers)
-                      response_json = response.json()
-                      urls = response_json["url"]
-                      await send(f"Archivo Subdido\nEnlace:\n"+urls)
-                      links.append(urls)
-              else:
-                  await msg.edit(f"**⬆️Subiendo:** `{namefile}`")
-                  log = "https://santiago.uo.edu.cu/index.php/stgo/login/signIn"
-                  session = requests.Session()
-                  username = "stvz02"
-                  password = "stvz02**"
-                  resp = session.get(log)
-                  soup = BeautifulSoup(resp.text, 'html.parser') 
-                  csrfToken = soup.find("input", attrs={"name": "csrfToken"})["value"]
-                  print(csrfToken)
-                  data = {
-                      "username": username,
-                      "password": password
-                  }
-                  session.post(log, data=data)
-                  upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
-                  payload = {'fileStage': '2', 'name[es_ES]': namefile}
-                  files = {'file': (namefile, open(path, 'rb'), 'application/octet-stream')}
-                  headers = {"X-Csrf-token": csrfToken}
-                  response = session.post(upload_url, data=payload, files=files, headers=headers)
-                  response_json = response.json()
-                  urls = response_json["url"]
-                  await send(f"Archivo Subdido\nEnlace:\n"+urls)        
-          except Exception as ex:
-              await send(ex)
-
     elif '/start' in mss:
         await bot.send_photo(username,"logo.jpg",caption="`Hola 👋🏻 a Stvz20_Upload, Bienvenido a este sistema de Descargas, estamos simpre para tí, y ayudarte a descagar cualquier archivo multimedia que desees☺️`",
             reply_markup=hom)
@@ -865,7 +764,12 @@ async def text_filter(client, message):
         Configs[username]["z"] = 99
         await send_config()
         await send("✅ nextcloud config")
-
+    elif '/rev' in mss:
+        Configs[username]["m"] = "revista"
+        Configs[username]["a"] = "revista"
+        Configs[username]["z"] = 10
+        await send_config()
+        await send("Configuración Cargada ⬆️🔽⏬")
     elif '/cancel' in mss:
         if id_de_ms[username]["proc"] == "Up":
             p = await bot.send_message(username, "`Por Favor Espere...`")
@@ -1645,7 +1549,7 @@ def upresv(session,csrfToken,files,msg,username):
         response = session.post(upload_url, data=payload, files=filess, headers=headers)
         response_json = response.json()
         urls = response_json["url"]
-        bot.send_message(username, f"[{namefiles}](url={urls}) Subido🔽")
+        bot.send_message(username, f"{namefiles} Subido🔽\n{urls}")
 
 def upresvs(session,csrfToken,path,msg,username):
     namefile = os.path.basename(path)
@@ -1657,7 +1561,8 @@ def upresvs(session,csrfToken,path,msg,username):
     response = session.post(upload_url, data=payload, files=files, headers=headers)
     response_json = response.json()
     urls = response_json["url"]
-    bot.send_message(username, f"[{namefile}](url={urls}) Subido🔽")
+    msg.edit(f"**{namefile} Subido🔽\n{urls}**")
+
 bot.start()
 bot.send_message(5416296262,'**BoT Iniciado**')
 print("Iniciado")
