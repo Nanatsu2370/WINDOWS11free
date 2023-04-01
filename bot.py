@@ -1661,17 +1661,22 @@ def upresv(session,csrfToken,files,msg,username):
         payload = {'fileStage': '2', 'name[es_ES]': namefiles}
         filess = {'file': (namefiles, open(filed, 'rb'), 'application/octet-stream')} 
         headers = {"X-Csrf-token": csrfToken}
-      #  msg.edit(f"**⬆️Subiendo🔽⏬:**\n`{namefiles}")
-        response = session.post(upload_url, data=payload, files=filess, headers=headers, stream=True)
+        msg.edit(f"**⬆️Subiendo🔽⏬:**\n`{namefiles}")
+        with open(file_path, "rb") as f:
+            response = session.post(upload_url, data=payload, files=filess, headers=headers, stream=True)
+            total_length = response.headers.get('content-length')
+            if total_length is None:
+                msg.edit_text(f"⬆️Subiendo🔽⏬:\n`{namefiles}`\n100%")
+            else:
+                with tqdm(total=int(total_length), unit='B', unit_scale=True, desc=f"⬆️Subiendo🔽⏬: {namefiles}", ascii=True) as progress_bar:
+                    for data in response.iter_content(chunk_size=4096):
+                        progress_bar.update(len(data))
+
+
       #  response_json = response.json()
-        total_size = int(response.headers.get('content-length', 0))
-        bytes_uploaded = 0
-        for chunk in response.iter_content(chunk_size=1024):
-            bytes_uploaded += len(chunk)
-            percent_complete = int(bytes_uploaded / total_size * 100)
-            msg.edit(f"⬆️Subiendo🔽⏬:\n`{namefiles}`\n{percent_complete}% completado")
-        urls = response.json()["url"]
-        bot.send_message(username, f"**{namefiles} Subido🔽\n{urls}**")
+        
+      #  urls = response.json()["url"]
+      #  bot.send_message(username, f"**{namefiles} Subido🔽\n{urls}**")
     
 
 bot.start()
