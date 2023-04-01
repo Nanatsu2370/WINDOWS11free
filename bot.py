@@ -1591,13 +1591,14 @@ async def proccess(filex,msg,username):
                 return
 
 async def upload_revista(path,msg,username):
-    send = message.reply
+    #send = message.reply
     namefile = os.path.basename(path)
     zips = Configs[username]["z"]
     filesize = Path(path).stat().st_size
     zipssize = 1024*1024*int(zips)
-    msg = await send(f"Archivo 📂: {namefile}**")
+    #msg = await send(f"Archivo 📂: {namefile}**")
     links = []
+    subido =[]
     if filesize-1048>zipssize:
         parts = round(filesize / zipssize)
         await msg.edit("Comprimiendo ❗")
@@ -1606,8 +1607,8 @@ async def upload_revista(path,msg,username):
             namefiles = os.path.basename(filed)
             a = len(files)
             b = len(links)
-            ab = a - b
-            await msg.edit(f"**⬆️Subiendo:** `{namefiles}`\nRestantes: {ab}")
+         #   ab = a - b
+            await msg.edit(f"**⬆️Subiendo:** `{namefiles}`\nRestantes: {b}")
             log = "https://santiago.uo.edu.cu/index.php/stgo/login/signIn"
             session = requests.Session()
             username = "stvz02"
@@ -1628,7 +1629,7 @@ async def upload_revista(path,msg,username):
             response = session.post(upload_url, data=payload, files=files, headers=headers)
             response_json = response.json()
             urls = response_json["url"]
-            await send(f"Archivo Subdido\nEnlace:\n"+urls)
+            await bot.send_message(username, f"Archivo Subdido: {namefiles}\nEnlace:\n"+urls)
             links.append(urls)
     else:
         await msg.edit(f"**⬆️Subiendo:** `{namefile}`")
