@@ -588,6 +588,7 @@ async def text_filter(client, message):
                       if len(links) == len(files):
                           break
                           await msg.edit("Archivos Subdidos")
+                      else:continue
               else:
                   await msg.edit(f"**⬆️Subiendo:** `{namefile}`")
                   log = "https://santiago.uo.edu.cu/index.php/stgo/login/signIn"
