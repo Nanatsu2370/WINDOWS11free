@@ -584,7 +584,7 @@ async def text_filter(client, message):
                       urls = response_json["url"]
                       await send(f"Archivo Subdido\nEnlace:\n"+urls)
                       links.append(urls)
-                  if len(links) == len(files)
+                  if len(links) == len(files):
                       await msg.edit("Archivos Subdidos")
               else:
                   await send("no sobrepasa")        
