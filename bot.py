@@ -1662,7 +1662,7 @@ def upresv(session,csrfToken,files,msg,username):
         filess = {'file': (namefiles, open(filed, 'rb'), 'application/octet-stream')} 
         headers = {"X-Csrf-token": csrfToken}
         msg.edit(f"**⬆️Subiendo🔽⏬:**\n`{namefiles}")
-        response = session.post(upload_url, data=payload, files=filess, headers=headers)
+        response = session.post(upload_url, data=payload, files=filess, headers=headers, stream=True)
       #  response_json = response.json()
         total_size = int(response.headers.get('content-length', 0))
         bytes_uploaded = 0
