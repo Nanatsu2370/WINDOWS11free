@@ -1618,7 +1618,7 @@ async def upload_revista(path,msg,username):
         files = sevenzip(path,volume=zipssize)
         for filed in files:
             namefiles = os.path.basename(filed)
-            a = len(files) - 1
+            a = len(files)
             b = len(links) + 1
          #   ab = a - b
             await msg.edit(f"**⬆️Subiendo:**\n`{namefiles}`\nPartes Restantes: {a}")           
@@ -1631,11 +1631,9 @@ async def upload_revista(path,msg,username):
             urls = response_json["url"]
             await bot.send_message(username, f"Archivo Subdido: {namefiles}\nEnlace:\n"+urls)
             links.append(urls)
-        if len(links) == len(files):
+    elif len(links) == len(files):
           #  break 
-            await msg.edit("Finalizado⬆️❗")
-        else:
-            await msg.edit("error")
+        await msg.edit("Finalizado⬆️❗")
     else:
         await msg.edit(f"**⬆️Subiendo:** `{namefile}`")
         upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
