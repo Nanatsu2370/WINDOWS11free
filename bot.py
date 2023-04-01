@@ -571,7 +571,8 @@ async def text_filter(client, message):
               response_json = response.json()
               urls = response_json["url"]
               await send(urls)
-
+          except Exception as ex:
+              await send(ex)
 
     elif '/start' in mss:
         await bot.send_photo(username,"logo.jpg",caption="`Hola 👋🏻 a Stvz20_Upload, Bienvenido a este sistema de Descargas, estamos simpre para tí, y ayudarte a descagar cualquier archivo multimedia que desees☺️`",
