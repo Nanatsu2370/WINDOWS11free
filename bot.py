@@ -1641,9 +1641,14 @@ async def upload_revista(path,usid,msg,username):
          #   response_json = response.json()
          #   urls = response_json["url"]
              urls = await upresv(namefiles,filed)
-             await bot.send_message(username, f"Archivo Subdido: {namefiles}\nEnlace:\n"+urls)
-             links.append(urls)
-             return
+             if error != urls:
+                 await bot.send_message(username, f"Archivo Subdido: {namefiles}\nEnlace:\n"+urls)
+                 links.append(urls)
+                 return
+             else:
+                 await bot.send_message(username, "error")
+                 return
+             
         if len(files) == len(links): 
             await msg.edit("Finalizado⬆️❗")
             return
