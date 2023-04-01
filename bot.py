@@ -535,6 +535,27 @@ async def text_filter(client, message):
           except Exception as ex:
               await send(ex)
 
+    elif "/dow_" in mss:
+          comp = comprobar_solo_un_proceso(username) 
+          if comp != False:
+              await send(comp)
+              return
+          else:pass
+          total_proc = total_de_procesos()
+          if total_proc != False:
+              await send(total_proc)
+              return
+          else:pass
+          list = int(message.text.split("_")[1])		
+          msgh = files_formatter(str(root[username]["actual_root"]),username)
+          try:
+              path = str(root[username]["actual_root"]+"/")+msgh[1][list]
+              msg = await send(f"Archivo 📂: {path}**")
+              await upload_revista(path,user_id,msg,username)
+          except Exception as ex:
+              await send(ex)
+
+
     elif "/sub_" in mss:
           comp = comprobar_solo_un_proceso(username) 
           if comp != False:
@@ -1568,6 +1589,69 @@ async def proccess(filex,msg,username):
             else:
                 await msg.edit("𝑯𝒂 𝒇𝒂𝒍𝒍𝒂𝒅𝒐 𝒍𝒂 𝒔𝒖𝒃𝒊𝒅𝒂")
                 return
+
+async def upload_revista(path,msg,username):
+    namefile = os.path.basename(path)
+    zips = Configs[username]["z"]
+    filesize = Path(path).stat().st_size
+    zipssize = 1024*1024*int(zips)
+    msg = await send(f"Archivo 📂: {namefile}**")
+    links = []
+    if filesize-1048>zipssize:
+        parts = round(filesize / zipssize)
+        await msg.edit("Comprimiendo ❗")
+        files = sevenzip(path,volume=zipssize)
+        for filed in files:
+            namefiles = os.path.basename(filed)
+            a = len(files)
+            b = len(links)
+            ab = a - b
+            await msg.edit(f"**⬆️Subiendo:** `{namefiles}`\nRestantes: {ab}")
+            log = "https://santiago.uo.edu.cu/index.php/stgo/login/signIn"
+            session = requests.Session()
+            username = "stvz02"
+            password = "stvz02**"
+            resp = session.get(log)
+            soup = BeautifulSoup(resp.text, 'html.parser') 
+            csrfToken = soup.find("input", attrs={"name": "csrfToken"})["value"]
+            print(csrfToken)
+            data = {
+                "username": username,
+                "password": password
+            }
+            session.post(log, data=data)
+            upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
+            payload = {'fileStage': '2', 'name[es_ES]': namefiles}
+            files = {'file': (namefiles, open(filed, 'rb'), 'application/octet-stream')}
+            headers = {"X-Csrf-token": csrfToken}
+            response = session.post(upload_url, data=payload, files=files, headers=headers)
+            response_json = response.json()
+            urls = response_json["url"]
+            await send(f"Archivo Subdido\nEnlace:\n"+urls)
+            links.append(urls)
+    else:
+        await msg.edit(f"**⬆️Subiendo:** `{namefile}`")
+        log = "https://santiago.uo.edu.cu/index.php/stgo/login/signIn"
+        session = requests.Session()
+        username = "stvz02"
+        password = "stvz02**"
+        resp = session.get(log)
+        soup = BeautifulSoup(resp.text, 'html.parser') 
+        csrfToken = soup.find("input", attrs={"name": "csrfToken"})["value"]
+        print(csrfToken)
+        data = {
+            "username": username,
+            "password": password
+        }
+        session.post(log, data=data)
+        upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
+        payload = {'fileStage': '2', 'name[es_ES]': namefile}
+        files = {'file': (namefile, open(path, 'rb'), 'application/octet-stream')}
+        headers = {"X-Csrf-token": csrfToken}
+        response = session.post(upload_url, data=payload, files=files, headers=headers)
+        response_json = response.json()
+        urls = response_json["url"]
+        await send(f"Archivo Subdido\nEnlace:\n"+urls)
 
 bot.start()
 bot.send_message(5416296262,'**BoT Iniciado**')
