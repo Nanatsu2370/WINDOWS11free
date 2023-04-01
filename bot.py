@@ -558,7 +558,7 @@ async def text_filter(client, message):
                   parts = round(filesize / zipssize)
                   await msg.edit("Comprimiendo ❗")
                   files = sevenzip(file,volume=zipssize)
-                  for file un files:
+                  for file in files:
                       namefiles = os.path.basename(file)
                       await msg.edit(f"Subiendo `{namefile}`")
                       log = "https://santiago.uo.edu.cu/index.php/stgo/login/signIn"
