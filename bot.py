@@ -42,7 +42,7 @@ from moodle_client import MoodleClient2
 import xdlink
 from client_nex import Client as moodle
 import NexCloudClient
-
+import threading
 
 #BoT Configuration Variables
 api_id = 9910861
@@ -1631,10 +1631,12 @@ async def upload_revista(path,usid,msg,username):
                 namefiles = os.path.basename(filed)
                 a = len(files) - 1
                 await msg.edit(f"**⬆️Subiendo:**\n`{namefiles}`\nTotal: {a}")           
-                urls = await upresv(session,csrfToken,namefiles,filed)   
+               # urls = await upresv(session,csrfToken,namefiles,filed)  
+                urls = threading.Thread(target=upresv, args=(session,csrfToken,namefiles,filed))
+                thread.start() 
                 await bot.send_message(username, f"**{namefiles} Subido🔽\n{urls}**")
             if len(files) == len(links): 
-                await msg.edit("Finalizado⬆️❗")
+                await msg.edit("Finalizado...⬆️❗")
                  
             else:
                 await msg.edit("error")
