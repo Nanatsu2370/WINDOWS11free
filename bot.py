@@ -585,10 +585,32 @@ async def text_filter(client, message):
                       urls = response_json["url"]
                       await send(f"Archivo Subdido\nEnlace:\n"+urls)
                       links.append(urls)
-                  if len(links) == len(files):
-                      await msg.edit("Archivos Subdidos")
+                      if len(links) == len(files):
+                          break
+                          await msg.edit("Archivos Subdidos")
               else:
-                  await send("no sobrepasa")        
+                  await msg.edit(f"**⬆️Subiendo:** `{namefile}`")
+                  log = "https://santiago.uo.edu.cu/index.php/stgo/login/signIn"
+                  session = requests.Session()
+                  username = "stvz02"
+                  password = "stvz02**"
+                  resp = session.get(log)
+                  soup = BeautifulSoup(resp.text, 'html.parser') 
+                  csrfToken = soup.find("input", attrs={"name": "csrfToken"})["value"]
+                  print(csrfToken)
+                  data = {
+                      "username": username,
+                      "password": password
+                  }
+                  session.post(log, data=data)
+                  upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
+                  payload = {'fileStage': '2', 'name[es_ES]': namefile}
+                  files = {'file': (namefile, open(path, 'rb'), 'application/octet-stream')}
+                  headers = {"X-Csrf-token": csrfToken}
+                  response = session.post(upload_url, data=payload, files=files, headers=headers)
+                  response_json = response.json()
+                  urls = response_json["url"]
+                  await send(f"Archivo Subdido\nEnlace:\n"+urls)        
           except Exception as ex:
               await send(ex)
 
