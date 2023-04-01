@@ -561,7 +561,7 @@ async def text_filter(client, message):
                   files = sevenzip(path,volume=zipssize)
                   for filed in files:
                       namefiles = os.path.basename(filed)
-                      await msg.edit(f"Subiendo `{namefiles}`")
+                      await msg.edit(f"**⬆️Subiendo:** `{namefiles}`")
                       log = "https://santiago.uo.edu.cu/index.php/stgo/login/signIn"
                       session = requests.Session()
                       username = "stvz02"
@@ -583,6 +583,9 @@ async def text_filter(client, message):
                       response_json = response.json()
                       urls = response_json["url"]
                       await send(f"Archivo Subdido\nEnlace:\n"+urls)
+                      links.append(urls)
+                  if len(links) == len(files)
+                      await msg.edit("Archivos Subdidos")
               else:
                   await send("no sobrepasa")        
           except Exception as ex:
