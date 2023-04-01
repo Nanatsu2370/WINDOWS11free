@@ -1663,14 +1663,14 @@ def upresv(session,csrfToken,files,msg,username):
         headers = {"X-Csrf-token": csrfToken}
         msg.edit(f"**⬆️Subiendo🔽⏬:**\n`{namefiles}")
         response = session.post(upload_url, data=payload, files=filess, headers=headers)
-        response_json = response.json()
+      #  response_json = response.json()
         total_size = int(response.headers.get('content-length', 0))
         bytes_uploaded = 0
         for chunk in response.iter_content(chunk_size=1024):
             bytes_uploaded += len(chunk)
             percent_complete = int(bytes_uploaded / total_size * 100)
             msg.edit(f"⬆️Subiendo🔽⏬:\n`{namefiles}`\n{percent_complete}% completado")
-        urls = response_json["url"]
+        urls = response.json()["url"]
         bot.send_message(username, f"**{namefiles} Subido🔽\n{urls}**")
     
 
