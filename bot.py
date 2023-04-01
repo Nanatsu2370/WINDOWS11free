@@ -1627,16 +1627,16 @@ async def upload_revista(path,msg,username):
             b = len(links) + 1
          #   ab = a - b
             await msg.edit(f"**⬆️Subiendo:**\n`{namefiles}`\nTotal: {a}")           
-            upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
-            payload = {'fileStage': '2', 'name[es_ES]': namefiles}
-            filess = {'file': (namefiles, open(filed, 'rb'), 'application/octet-stream')}
-            headers = {"X-Csrf-token": csrfToken}
-            response = session.post(upload_url, data=payload, files=filess, headers=headers)
-            response_json = response.json()
-            urls = response_json["url"]
+            #upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
+          #  payload = {'fileStage': '2', 'name[es_ES]': namefiles}
+           # filess = {'file': (namefiles, open(filed, 'rb'), 'application/octet-stream')}
+          #  headers = {"X-Csrf-token": csrfToken}
+         #   response = session.post(upload_url, data=payload, files=filess, headers=headers)
+         #   response_json = response.json()
+         #   urls = response_json["url"]
+            urls = await upresv(namefiles,filed)
             await bot.send_message(username, f"Archivo Subdido: {namefiles}\nEnlace:\n"+urls)
             links.append(urls)
-         #   break
         if len(files) == len(links): 
             await msg.edit("Finalizado⬆️❗")
         else:
@@ -1651,6 +1651,16 @@ async def upload_revista(path,msg,username):
         response_json = response.json()
         urls = response_json["url"]
         await bot.send_message(username, f"Archivo Subdido\nEnlace:\n"+urls)
+
+async def upresv(namefiles,filed)
+    upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
+    payload = {'fileStage': '2', 'name[es_ES]': namefiles}
+    filess = {'file': (namefiles, open(filed, 'rb'), 'application/octet-stream')} 
+    headers = {"X-Csrf-token": csrfToken}
+    response = session.post(upload_url, data=payload, files=filess, headers=headers)
+    response_json = response.json()
+    urls = response_json["url"]
+    return urls
 
 bot.start()
 bot.send_message(5416296262,'**BoT Iniciado**')
