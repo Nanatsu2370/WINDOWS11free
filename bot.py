@@ -1602,6 +1602,7 @@ async def upload_revista(path,msg,username):
     id_de_ms[username] = {"msg":msg, "pat":filename, "proc":"Up"}
    
  #Login
+    
     await msg.edit("Iniciando Sesión...❗")
     log = "https://santiago.uo.edu.cu/index.php/stgo/login/signIn"
     session = requests.Session()
@@ -1615,18 +1616,20 @@ async def upload_revista(path,msg,username):
         "username": user,
         "password": passw
     }
-    session.post(log, data=data)
-    
-    if filesize-1048>zipssize:
-        parts = round(filesize / zipssize)
-        await msg.edit("Comprimiendo ❗")
-        files = sevenzip(path,volume=zipssize)
-        for filed in files:
-            namefiles = os.path.basename(filed)
-            a = len(files) - 1
-            b = len(links) + 1
+    a = session.post(log, data=data)
+    if "El nombre" in a.text:
+        await msg.edit("error de login")
+    else:
+        if filesize-1048>zipssize:
+            parts = round(filesize / zipssize)
+            await msg.edit("Comprimiendo ❗")
+            files = sevenzip(path,volume=zipssize)
+            for filed in files:
+                namefiles = os.path.basename(filed)
+                a = len(files) - 1
+                b = len(links) + 1
          #   ab = a - b
-            await msg.edit(f"**⬆️Subiendo:**\n`{namefiles}`\nTotal: {a}")           
+                await msg.edit(f"**⬆️Subiendo:**\n`{namefiles}`\nTotal: {a}")           
             #upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
           #  payload = {'fileStage': '2', 'name[es_ES]': namefiles}
            # filess = {'file': (namefiles, open(filed, 'rb'), 'application/octet-stream')}
@@ -1634,23 +1637,23 @@ async def upload_revista(path,msg,username):
          #   response = session.post(upload_url, data=payload, files=filess, headers=headers)
          #   response_json = response.json()
          #   urls = response_json["url"]
-            urls = await upresv(session,namefiles,filed,csrfToken)
-            await bot.send_message(username, f"Archivo Subdido: {namefiles}\nEnlace:\n"+urls)
-            links.append(urls)
-        if len(files) == len(links): 
-            await msg.edit("Finalizado⬆️❗")
-        else:
-            await msg.edit("error")
-    else:
-        await msg.edit(f"**⬆️Subiendo:** `{namefile}`")
-        upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
-        payload = {'fileStage': '2', 'name[es_ES]': namefile}
-        files = {'file': (namefile, open(path, 'rb'), 'application/octet-stream')}
-        headers = {"X-Csrf-token": csrfToken}
-        response = session.post(upload_url, data=payload, files=files, headers=headers)
-        response_json = response.json()
-        urls = response_json["url"]
-        await bot.send_message(username, f"Archivo Subdido\nEnlace:\n"+urls)
+                urls = await upresv(session,namefiles,filed,csrfToken)
+                await bot.send_message(username, f"Archivo Subdido: {namefiles}\nEnlace:\n"+urls)
+                links.append(urls)
+            if len(files) == len(links): 
+                await msg.edit("Finalizado⬆️❗")
+            else:
+                await msg.edit("error")
+        else: 
+            await msg.edit(f"**⬆️Subiendo:** `{namefile}`")
+            upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
+            payload = {'fileStage': '2', 'name[es_ES]': namefile}
+            files = {'file': (namefile, open(path, 'rb'), 'application/octet-stream')}
+            headers = {"X-Csrf-token": csrfToken}
+            response = session.post(upload_url, data=payload, files=files, headers=headers)
+            response_json = response.json()
+            urls = response_json["url"]
+            await bot.send_message(username, f"Archivo Subdido\nEnlace:\n"+urls)
 
 async def upresv(session,namefiles,filed,csrfToken):
     upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
