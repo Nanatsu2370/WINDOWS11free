@@ -562,7 +562,10 @@ async def text_filter(client, message):
                   files = sevenzip(path,volume=zipssize)
                   for filed in files:
                       namefiles = os.path.basename(filed)
-                      await msg.edit(f"**⬆️Subiendo:** `{namefiles}`")
+                      a = len(files)
+                      b = len(links)
+                      ab = a - b
+                      await msg.edit(f"**⬆️Subiendo:** `{namefiles}`\nRestantes: {ab}")
                       log = "https://santiago.uo.edu.cu/index.php/stgo/login/signIn"
                       session = requests.Session()
                       username = "stvz02"
@@ -585,10 +588,6 @@ async def text_filter(client, message):
                       urls = response_json["url"]
                       await send(f"Archivo Subdido\nEnlace:\n"+urls)
                       links.append(urls)
-                      if len(links) == len(files):
-                          break
-                          await msg.edit("Archios Subdidos")
-                      else:continue
               else:
                   await msg.edit(f"**⬆️Subiendo:** `{namefile}`")
                   log = "https://santiago.uo.edu.cu/index.php/stgo/login/signIn"
