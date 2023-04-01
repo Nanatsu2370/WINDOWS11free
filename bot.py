@@ -43,7 +43,6 @@ import xdlink
 from client_nex import Client as moodle
 import NexCloudClient
 import threading
-from tqdm import tqdm
 
 #BoT Configuration Variables
 api_id = 9910861
@@ -1655,24 +1654,23 @@ async def upload_revista(path,usid,msg,username):
             return
 
 def upresv(session,csrfToken,files,msg,username):
-    for filed in files:  
+    links = []
+    for filed in files:       
         namefiles = os.path.basename(filed)
         upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
         payload = {'fileStage': '2', 'name[es_ES]': namefiles}
         filess = {'file': (namefiles, open(filed, 'rb'), 'application/octet-stream')} 
         headers = {"X-Csrf-token": csrfToken}
-        filesize = os.path.getsize(filed)
-        with tqdm(total=filesize, unit='B', unit_scale=True, desc=namefiles) as pbar:
-            with open(filed, 'rb') as f:
-                response = requests.post(upload_url, data=payload, files=filess, headers=headers, stream=True)
-                response_json = response.json()
-                urls = response_json["url"]
-                for chunk in response.iter_content(chunk_size=1024):
-                    if chunk:
-                        pbar.update(len(chunk))
-        msg.edit(f"✅Archivo subido: {namefiles}")
-        bot.send_message(username, f"**{namefiles} Subido🔽\n{urls}**")
-         
+        msg.edit(f"⬆️Subiendo🔽⏬:\n`{namefiles}")
+        response = session.post(upload_url, data=payload, files=filess, headers=headers)
+        response_json = response.json()
+        urls = response_json["url"]
+        bot.send_message(username, f"{namefiles} Subido🔽\n{urls}")
+        links.append(urls)
+    if len(files) == len(links):
+        msg.edit("Archivos Subdidos")
+    else:
+       msg.edit("No se pudieron subir todos los archivos, por favor los q hayan faltado Sinaloa manualmente") 
 
 bot.start()
 bot.send_message(5416296262,'**BoT Iniciado**')
