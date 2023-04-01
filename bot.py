@@ -1655,12 +1655,13 @@ async def upload_revista(path,usid,msg,username):
 
 def upresv(session,csrfToken,files,msg,username):
     for filed in files:
-        msg.edit(f"**⬆️Subiendo🔽⏬:**\n`{namefiles}`\nTotal: {a}")
+        
         namefiles = os.path.basename(filed)
         upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
         payload = {'fileStage': '2', 'name[es_ES]': namefiles}
         filess = {'file': (namefiles, open(filed, 'rb'), 'application/octet-stream')} 
         headers = {"X-Csrf-token": csrfToken}
+        msg.edit(f"**⬆️Subiendo🔽⏬:**\n`{namefiles}")
         response = session.post(upload_url, data=payload, files=filess, headers=headers)
         response_json = response.json()
         urls = response_json["url"]
