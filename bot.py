@@ -715,6 +715,7 @@ async def text_filter(client, message):
             username = message.from_user.username	
             total = len(Configs) - 10
             message = "**Usuarios: **"+ str(total)+'\n\n'
+            i = 0
             for user in Configs:
                 if user == "uclv":continue
                 if user == "gtm":continue
@@ -727,7 +728,9 @@ async def text_filter(client, message):
                 if user == "UHTRED_OF_BEBBANBURG":continue
                 if user == "Stvz20":continue
                 if user == "uclv_p":continue
-                message+=f"{user}\n"
+                if user == "vcl":continue
+                message+=f"@{user}\n"
+                i += 1
             msg = f"@{message}\n"
             await client.send_message(username,msg)   
         else: 
@@ -767,6 +770,12 @@ async def text_filter(client, message):
     elif '/rev' in mss:
         Configs[username]["m"] = "revista"
         Configs[username]["a"] = "revista"
+        Configs[username]["z"] = 10
+        await send_config()
+        await send("Configuración Cargada ⬆️🔽⏬")
+    elif '/eco' in mss:
+        Configs[username]["m"] = "eco"
+        Configs[username]["a"] = "eco"
         Configs[username]["z"] = 10
         await send_config()
         await send("Configuración Cargada ⬆️🔽⏬")
@@ -1555,6 +1564,73 @@ def upresvs(session,csrfToken,path,msg,username):
     namefile = os.path.basename(path)
     msg.edit(f"**⬆️Subiendo:** `{namefile}`")
     upload_url = "https://santiago.uo.edu.cu/index.php/stgo/api/v1/submissions/12538/files"
+    payload = {'fileStage': '2', 'name[es_ES]': namefile}
+    files = {'file': (namefile, open(path, 'rb'), 'application/octet-stream')}
+    headers = {"X-Csrf-token": csrfToken}
+    response = session.post(upload_url, data=payload, files=files, headers=headers)
+    response_json = response.json()
+    urls = response_json["url"]
+    msg.edit(f"**{namefile} Subido🔽\n{urls}**")
+
+#subida a eco
+async def upload_eco(path,usid,msg,username):
+    #send = message.reply
+    namefile = os.path.basename(path)
+    zips = Configs[username]["z"]
+    filesize = Path(path).stat().st_size
+    zipssize = 1024*1024*int(zips)
+    #msg = await send(f"Archivo 📂: {namefile}**")
+    links = []
+    filename = Path(path).name
+   # id_de_ms[username] = {"msg":msg, "pat":filename, "proc":"Up"}
+   
+ #Login
+    
+    await msg.edit("Iniciando Sesión...❗")
+    log = "https://anuarioeco.uo.edu.cu/index.php/aeco/login/signIn"
+    session = requests.Session()
+    user = "stvz02"
+    passw = "stvz02**"
+    resp = session.get(log)
+    soup = BeautifulSoup(resp.text, 'html.parser') 
+    csrfToken = soup.find("input", attrs={"name": "csrfToken"})["value"]
+    print(csrfToken)
+    data = {
+        "username": user,
+        "password": passw
+    }
+    a = session.post(log, data=data)
+    if "El nombre" in a.text:
+        await msg.edit("error de login")
+    else:
+        if filesize-1048>zipssize:
+            parts = round(filesize / zipssize)
+            await msg.edit("Comprimiendo ❗")
+            files = sevenzip(path,volume=zipssize)
+            thread = threading.Thread(target=upeco, args=(session,csrfToken,files,msg,username))
+            thread.start() 
+        else: 
+            thread = threading.Thread(target=upecos, args=(session,csrfToken,path,msg,username))
+            thread.start()
+            
+
+def upeco(session,csrfToken,files,msg,username):
+    for filed in files:
+        namefiles = os.path.basename(filed)
+        upload_url = "https://anuarioeco.uo.edu.cu/index.php/stgo/api/v1/submissions/5736/files"
+        payload = {'fileStage': '2', 'name[es_ES]': namefiles}
+        filess = {'file': (namefiles, open(filed, 'rb'), 'application/octet-stream')} 
+        headers = {"X-Csrf-token": csrfToken}
+        msg.edit(f"⬆️Subiendo🔽⏬:\n`{namefiles}")
+        response = session.post(upload_url, data=payload, files=filess, headers=headers)
+        response_json = response.json()
+        urls = response_json["url"]
+        bot.send_message(username, f"{namefiles} Subido🔽\n{urls}")
+
+def upecos(session,csrfToken,path,msg,username):
+    namefile = os.path.basename(path)
+    msg.edit(f"**⬆️Subiendo:** `{namefile}`")
+    upload_url = "https://anuarioeco.uo.edu.cu/index.php/stgo/api/v1/submissions/5736/files"
     payload = {'fileStage': '2', 'name[es_ES]': namefile}
     files = {'file': (namefile, open(path, 'rb'), 'application/octet-stream')}
     headers = {"X-Csrf-token": csrfToken}
