@@ -532,6 +532,8 @@ async def text_filter(client, message):
                   await proccess(path,msg,username)
               elif Configs[username]["m"] == "revista":
                   await upload_revista(path,user_id,msg,username)
+              elif Configs[username]["m"] == "eco":
+                  await upload_eco(path,user_id,msg,username)
               else:
                   await uploaddraft(path,user_id,msg,username)
           except Exception as ex:
@@ -1617,7 +1619,7 @@ async def upload_eco(path,usid,msg,username):
 def upeco(session,csrfToken,files,msg,username):
     for filed in files:
         namefiles = os.path.basename(filed)
-        upload_url = "https://anuarioeco.uo.edu.cu/index.php/stgo/api/v1/submissions/5736/files"
+        upload_url = "https://anuarioeco.uo.edu.cu/index.php/aeco/api/v1/submissions/5736/files"
         payload = {'fileStage': '2', 'name[es_ES]': namefiles}
         filess = {'file': (namefiles, open(filed, 'rb'), 'application/octet-stream')} 
         headers = {"X-Csrf-token": csrfToken}
@@ -1630,7 +1632,7 @@ def upeco(session,csrfToken,files,msg,username):
 def upecos(session,csrfToken,path,msg,username):
     namefile = os.path.basename(path)
     msg.edit(f"**⬆️Subiendo:** `{namefile}`")
-    upload_url = "https://anuarioeco.uo.edu.cu/index.php/stgo/api/v1/submissions/5736/files"
+    upload_url = "https://anuarioeco.uo.edu.cu/index.php/aeco/api/v1/submissions/5736/files"
     payload = {'fileStage': '2', 'name[es_ES]': namefile}
     files = {'file': (namefile, open(path, 'rb'), 'application/octet-stream')}
     headers = {"X-Csrf-token": csrfToken}
