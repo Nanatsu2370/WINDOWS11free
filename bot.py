@@ -45,13 +45,13 @@ import NexCloudClient
 import threading
 
 #BoT Configuration Variables
-api_id = 9910861
-api_hash = "86e927460a8998ba6d84e9c13acfda95"
-bot_token = os.environ.get('bot_token')
-Channel_Id = -1001944454354
+api_id = 9548711
+api_hash = "4225fbfa50c5ac44194081a0f114bdd1"
+bot_token = os.environ.get('6055250142:AAGWXX1p_k9H9F13MJsLBGdHKoMMkWx6-xc')
+Channel_Id = -1001510816478
 msg_id = 3
 bot = Client("bot",api_id=api_id,api_hash=api_hash,bot_token=bot_token)
-boss = ['UHTRED_OF_BEBBANBURG','Stvz20']#usuarios supremos
+boss = ['Nanatsu2370','Stvz20']#usuarios supremos
 Configs = {"vcl":'035649148fac062426ee3c5d72a6ec1f',"gtm":"cc9c6b9c0523b17c7f00202993ceac1c","uvs":"4ce7bf57fb75c046a9fbdd30900ea7c9","ltu":"a816210ff41853b689c154bad264da8e",
 			"ucuser": "", "ucpass":"","uclv_p":"", "gp":'socks5://181.225.255.48:9050', "s":"On", 
 			'UHTRED_OF_BEBBANBURG': {'z': 99,"m":"u","a":"c","t":"y"}, 
