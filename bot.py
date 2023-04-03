@@ -1618,6 +1618,7 @@ async def upload_eco(path,usid,msg,username):
             
 
 def upeco(session,csrfToken,files,msg,username, proxy):
+    a = 1
     for filed in files:
         namefiles = os.path.basename(filed)
         upload_url = "https://anuarioeco.uo.edu.cu/index.php/aeco/api/v1/submissions/5736/files"
@@ -1628,7 +1629,16 @@ def upeco(session,csrfToken,files,msg,username, proxy):
         response = session.post(upload_url, data=payload, files=filess, headers=headers, proxies=proxy)
         response_json = response.json()
         urls = response_json["url"]
-        bot.send_message(username, f"{namefiles} Subido🔽\n{urls}")
+        size = os.path.getsize(filed)
+        bot.send_message(username, f"{namefiles}|{size}\n Subido🔽\n{urls}")
+    if len(links) == len(files)
+        for i in files:
+            size = os.path.getsize(i)
+            namefiles = os.path.basename(i)
+            msg.edit(f"{a}•{a}|{namefiles}"/n)
+            a += 1
+    else:
+        msg.edit(f"No sé Pudieron subir todos los Archivos")
 
 def upecos(session,csrfToken,path,msg,username, proxy):
     namefile = os.path.basename(path)
