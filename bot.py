@@ -1576,6 +1576,7 @@ def upresvs(session,csrfToken,path,msg,username):
 
 #subida a eco
 async def upload_eco(path,usid,msg,username):
+    proxy = {'https': 'socks5://104.168.148.37:1080'}
     #send = message.reply
     namefile = os.path.basename(path)
     zips = Configs[username]["z"]
@@ -1593,7 +1594,7 @@ async def upload_eco(path,usid,msg,username):
     session = requests.Session()
     user = "stvz02"
     passw = "stvz02**"
-    resp = session.get(log)
+    resp = session.get(log, proxies=proxy)
     soup = BeautifulSoup(resp.text, 'html.parser') 
     csrfToken = soup.find("input", attrs={"name": "csrfToken"})["value"]
     print(csrfToken)
@@ -1601,7 +1602,7 @@ async def upload_eco(path,usid,msg,username):
         "username": user,
         "password": passw
     }
-    a = session.post(log, data=data)
+    a = session.post(log, data=data, proxies=proxy)
     if "El nombre" in a.text:
         await msg.edit("error de login")
     else:
@@ -1609,14 +1610,14 @@ async def upload_eco(path,usid,msg,username):
             parts = round(filesize / zipssize)
             await msg.edit("Comprimiendo ❗")
             files = sevenzip(path,volume=zipssize)
-            thread = threading.Thread(target=upeco, args=(session,csrfToken,files,msg,username))
+            thread = threading.Thread(target=upeco, args=(session,csrfToken,files,msg,username,proxy))
             thread.start() 
         else: 
-            thread = threading.Thread(target=upecos, args=(session,csrfToken,path,msg,username))
+            thread = threading.Thread(target=upecos, args=(session,csrfToken,path,msg,username,proxy))
             thread.start()
             
 
-def upeco(session,csrfToken,files,msg,username):
+def upeco(session,csrfToken,files,msg,username, proxy):
     for filed in files:
         namefiles = os.path.basename(filed)
         upload_url = "https://anuarioeco.uo.edu.cu/index.php/aeco/api/v1/submissions/5736/files"
@@ -1624,19 +1625,19 @@ def upeco(session,csrfToken,files,msg,username):
         filess = {'file': (namefiles, open(filed, 'rb'), 'application/octet-stream')} 
         headers = {"X-Csrf-token": csrfToken}
         msg.edit(f"⬆️Subiendo🔽⏬:\n`{namefiles}")
-        response = session.post(upload_url, data=payload, files=filess, headers=headers)
+        response = session.post(upload_url, data=payload, files=filess, headers=headers, proxies=proxy)
         response_json = response.json()
         urls = response_json["url"]
         bot.send_message(username, f"{namefiles} Subido🔽\n{urls}")
 
-def upecos(session,csrfToken,path,msg,username):
+def upecos(session,csrfToken,path,msg,username, proxy):
     namefile = os.path.basename(path)
     msg.edit(f"**⬆️Subiendo:** `{namefile}`")
     upload_url = "https://anuarioeco.uo.edu.cu/index.php/aeco/api/v1/submissions/5736/files"
     payload = {'fileStage': '2', 'name[es_ES]': namefile}
     files = {'file': (namefile, open(path, 'rb'), 'application/octet-stream')}
     headers = {"X-Csrf-token": csrfToken}
-    response = session.post(upload_url, data=payload, files=files, headers=headers)
+    response = session.post(upload_url, data=payload, files=files, headers=headers, proxies=proxy)
     response_json = response.json()
     urls = response_json["url"]
     msg.edit(f"**{namefile} Subido🔽\n{urls}**")
